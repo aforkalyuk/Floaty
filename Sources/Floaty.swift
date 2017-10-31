@@ -664,10 +664,17 @@ open class Floaty: UIView {
             return
         }
         
-        circleLayer.shadowOffset = CGSize(width: 1, height: 1)
+        // inner shadow
+        circleLayer.shadowOffset = CGSize(width: 0, height: 0)
         circleLayer.shadowRadius = 2
-        circleLayer.shadowColor = UIColor.black.cgColor
-        circleLayer.shadowOpacity = 0.4
+        circleLayer.shadowColor = UIColor(red: 94.0 / 255.0, green: 140.0 / 255.0, blue: 207.0 / 255.0, alpha: 0.1).cgColor
+        circleLayer.shadowOpacity = 1.0
+        
+        // outter shadow
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowRadius = 5
+        layer.shadowColor = UIColor(red: 172.0 / 255.0, green: 191.0 / 255.0, blue: 228.0 / 255.0, alpha: 0.3).cgColor
+        layer.shadowOpacity = 1.0
     }
 
     fileprivate func plusBezierPath() -> UIBezierPath {
