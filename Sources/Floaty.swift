@@ -67,6 +67,7 @@ open class Floaty: UIView {
      Animation speed of buttons
      */
     @IBInspectable open var animationSpeed: Double = 0.1
+
     /**
         Button color.
     */
@@ -81,6 +82,51 @@ open class Floaty: UIView {
         }
     }
 
+    /**
+     Button badge image.
+     */
+    @IBInspectable open var badgeImage: UIImage? = nil {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+
+    /**
+     Badge icon color.
+     */
+    @IBInspectable open var badgeAngle: CGFloat = 60 {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    /**
+     Badge icon size.
+     */
+    @IBInspectable open var badgeSize: CGSize = CGSize(width: 10, height: 10) {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    /**
+     Badge icon color.
+     */
+    @IBInspectable open var badgeColor: UIColor = UIColor(white: 0.2, alpha: 1) {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+
+    /**
+     Badge's icon visibility.
+     */
+    @IBInspectable open var isBadgeHidden: Bool = true {
+        didSet {
+            badgeImageView.isHidden = isBadgeHidden
+        }
+    }
+    
     /**
         Plus icon color inside button.
     */
@@ -177,6 +223,11 @@ open class Floaty: UIView {
     fileprivate var buttonImageView: UIImageView = UIImageView()
 
     /**
+     Button badge image view.
+     */
+    fileprivate var badgeImageView: UIImageView = UIImageView()
+
+    /**
         If you keeping touch inside button, button overlaid with tint layer.
     */
     fileprivate var tintLayer: CAShapeLayer = CAShapeLayer()
@@ -264,6 +315,7 @@ open class Floaty: UIView {
         } else {
             setButtonImage()
         }
+        setBadgeImage()
         setShadow()
     }
 
@@ -634,6 +686,27 @@ open class Floaty: UIView {
 
         addSubview(buttonImageView)
     }
+    
+    fileprivate func setBadgeImage() {
+        badgeImageView.removeFromSuperview()
+        badgeImageView = UIImageView(image: badgeImage)
+        badgeImageView.contentMode = UIViewContentMode.scaleAspectFill
+        badgeImageView.tintColor = badgeColor
+        
+        let radius = size / 2.0
+        let rad = degreesToRadians(badgeAngle)
+        let x = radius + radius * cos(rad) - badgeSize.width / 2.0
+        let y = radius - radius * sin(rad) - badgeSize.height / 2.0
+
+        badgeImageView.frame = CGRect(
+            x: x,
+            y: y,
+            width: badgeSize.width,
+            height: badgeSize.height
+        )
+        
+        addSubview(badgeImageView)
+    }
 
     fileprivate func setTintLayer() {
         tintLayer.frame = CGRect(x: circleLayer.frame.origin.x, y: circleLayer.frame.origin.y, width: size, height: size)
@@ -647,8 +720,8 @@ open class Floaty: UIView {
         overlayView.backgroundColor = overlayColor
         overlayView.alpha = 0
         overlayView.isUserInteractionEnabled = true
-
     }
+    
 	fileprivate func setOverlayFrame() {
         if let superview = superview {
 		    overlayView.frame = CGRect(

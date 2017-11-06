@@ -27,7 +27,8 @@ open class FloatyItem: UIView {
         didSet {
             self.frame = CGRect(x: 0, y: 0, width: size, height: size)
             titleLabel.frame.origin.y = self.frame.height/2-titleLabel.frame.size.height/2
-            _iconImageView?.center = CGPoint(x: size/2, y: size/2) + imageOffset
+            _iconImageView?.center = CGPoint(x: size / 2.0, y: size / 2.0) + imageOffset
+            _badgeImageView?.center = badgeCenter
             self.setNeedsDisplay()
         }
     }
@@ -71,6 +72,39 @@ open class FloatyItem: UIView {
         didSet {
             _iconImageView?.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
             _iconImageView?.center = CGPoint(x: size/2, y: size/2) + imageOffset
+        }
+    }
+
+    private var badgeCenter: CGPoint {
+        let radius = size / 2.0
+        let rad = badgeAngle / 180.0 * CGFloat.pi
+        let x = radius + radius * cos(rad)
+        let y = radius - radius * sin(rad)
+        return CGPoint(x: x, y: y) + badgeOffset
+    }
+    open var badgeOffset: CGPoint = CGPoint.zero {
+        didSet {
+            _badgeImageView?.center = badgeCenter
+        }
+
+    }
+
+    /**
+     Badge icon angle.
+     */
+    open var badgeAngle: CGFloat = 60.0 {
+        didSet {
+            _badgeImageView?.center = badgeCenter
+        }
+    }
+
+    /**
+     Badge icon size.
+     */
+    open var badgeSize: CGSize = CGSize(width: 10, height: 10) {
+        didSet {
+            _badgeImageView?.frame = CGRect(x: 0, y: 0, width: badgeSize.width, height: badgeSize.height)
+            _badgeImageView?.center = badgeCenter
         }
     }
 
@@ -171,6 +205,52 @@ open class FloatyItem: UIView {
     }
 
     /**
+     Item's badge image view.
+     */
+    var _badgeImageView: UIImageView? = nil
+    open var badgeImageView: UIImageView {
+        get {
+            if _badgeImageView == nil {
+                _badgeImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: badgeSize.width, height: badgeSize.height))
+                _badgeImageView?.center = badgeCenter
+                _badgeImageView?.contentMode = UIViewContentMode.scaleAspectFill
+                _badgeImageView?.isHidden = isBadgeHidden
+                addSubview(_badgeImageView!)
+            }
+            return _badgeImageView!
+        }
+    }
+    
+    /**
+     Badge's image.
+     */
+    open var badgeImage: UIImage? = nil {
+        didSet {
+            badgeImageView.image = badgeImage
+        }
+    }
+    
+    /**
+     Item's badge tint color change
+     */
+    open var badgeTintColor: UIColor! = nil {
+        didSet {
+            let image = badgeImageView.image?.withRenderingMode(.alwaysTemplate)
+            _badgeImageView?.tintColor = badgeTintColor
+            _badgeImageView?.image = image
+        }
+    }
+    
+    /**
+     Badge's icon visibility.
+     */
+    open var isBadgeHidden: Bool = true {
+        didSet {
+            _badgeImageView?.isHidden = isBadgeHidden
+        }
+    }
+    
+    /**
       itemBackgroundColor change
     */
     public var itemBackgroundColor: UIColor? = nil {
@@ -207,6 +287,9 @@ open class FloatyItem: UIView {
         }
         if _iconImageView != nil {
             bringSubview(toFront: _iconImageView!)
+        }
+        if _badgeImageView != nil {
+            bringSubview(toFront: _badgeImageView!)
         }
     }
 
