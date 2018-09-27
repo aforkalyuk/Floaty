@@ -196,7 +196,7 @@ open class Floaty: UIView {
     
     open var sticky: Bool = false
     
-    open static var global: FloatyManager {
+    public static var global: FloatyManager {
         get {
             return FloatyManager.defaultInstance()
         }
