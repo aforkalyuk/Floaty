@@ -177,7 +177,7 @@ open class FloatyItem: UIView {
             if _iconImageView == nil {
                 _iconImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
                 _iconImageView?.center = CGPoint(x: size/2, y: size/2) + imageOffset
-                _iconImageView?.contentMode = UIViewContentMode.scaleAspectFill
+                _iconImageView?.contentMode = UIView.ContentMode.scaleAspectFill
                 addSubview(_iconImageView!)
             }
             return _iconImageView!
@@ -213,7 +213,7 @@ open class FloatyItem: UIView {
             if _badgeImageView == nil {
                 _badgeImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: badgeSize.width, height: badgeSize.height))
                 _badgeImageView?.center = badgeCenter
-                _badgeImageView?.contentMode = UIViewContentMode.scaleAspectFill
+                _badgeImageView?.contentMode = UIView.ContentMode.scaleAspectFill
                 _badgeImageView?.isHidden = isBadgeHidden
                 addSubview(_badgeImageView!)
             }
@@ -283,13 +283,13 @@ open class FloatyItem: UIView {
         setShadow()
 
         if _titleLabel != nil {
-            bringSubview(toFront: _titleLabel!)
+            bringSubviewToFront(_titleLabel!)
         }
         if _iconImageView != nil {
-            bringSubview(toFront: _iconImageView!)
+            bringSubviewToFront(_iconImageView!)
         }
         if _badgeImageView != nil {
-            bringSubview(toFront: _badgeImageView!)
+            bringSubviewToFront(_badgeImageView!)
         }
     }
 
